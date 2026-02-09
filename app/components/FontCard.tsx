@@ -16,6 +16,11 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
     const [alternatives, setAlternatives] = useState<FontAlternative[]>([]);
     const [loadingAlternatives, setLoadingAlternatives] = useState(false);
 
+    // Download state
+    const [showConsentPrompt, setShowConsentPrompt] = useState(false);
+    const [consentChecked, setConsentChecked] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
+
     // Only proxy external URLs, keep data URLs as is
     const isDataUrl = font.url.startsWith('data:');
     const displayUrl = isDataUrl
@@ -80,6 +85,60 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
         }
     };
 
+    const performDownload = async () => {
+        setIsDownloading(true);
+        try {
+            const response = await fetch(displayUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            // Extract extension from format or URL, default to woff2
+            let ext = 'woff2';
+            if (font.format) {
+                ext = font.format.toLowerCase();
+            } else if (font.url && !isDataUrl) {
+                const match = font.url.match(/\.(woff2?|ttf|otf|eot)$/i);
+                if (match) ext = match[1].toLowerCase();
+            }
+
+            const filename = `${font.family.replace(/\s+/g, '-')}-${font.weight || 'regular'}.${ext}`;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Download failed:', error);
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    const handleDownload = () => {
+        // Check global consent
+        const hasConsented = typeof window !== 'undefined' && localStorage.getItem('font-download-consent') === 'true';
+
+        if (hasConsented) {
+            performDownload();
+            return;
+        }
+
+        // If not consented, show prompt
+        if (!showConsentPrompt) {
+            setShowConsentPrompt(true);
+            return;
+        }
+
+        // If prompt shown, require check
+        if (consentChecked) {
+            localStorage.setItem('font-download-consent', 'true');
+            setShowConsentPrompt(false); // Hide prompt after consent
+            performDownload();
+        }
+    };
+
     const formatBadgeStyle = (format: string): string => {
         const styles: Record<string, string> = {
             'WOFF2': 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
@@ -92,8 +151,6 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
         };
         return styles[format.toUpperCase()] || 'bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-gray-400';
     };
-
-
 
     return (
         <motion.div
@@ -162,6 +219,70 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                     </span>
                 </div>
 
+                {/* Download Section */}
+                <div className="space-y-3 mb-2">
+                    <AnimatePresence>
+                        {showConsentPrompt && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                                animate={{ opacity: 1, height: 'auto', marginBottom: 12 }}
+                                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                                className="overflow-hidden"
+                            >
+                                <label className="flex items-start gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 cursor-pointer select-none group/checkbox">
+                                    <div className="relative flex items-center mt-0.5">
+                                        <input
+                                            type="checkbox"
+                                            checked={consentChecked}
+                                            onChange={(e) => setConsentChecked(e.target.checked)}
+                                            className="peer w-4 h-4 text-amber-600 border-amber-300 rounded focus:ring-amber-500 dark:border-amber-700 dark:bg-zinc-800 dark:checked:bg-amber-600 cursor-pointer"
+                                        />
+                                    </div>
+                                    <span className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed font-medium">
+                                        I understand this font may be proprietary and downloading/using it could have legal or security implications.
+                                    </span>
+                                </label>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <motion.button
+                        onClick={handleDownload}
+                        disabled={isDownloading || (showConsentPrompt && !consentChecked)}
+                        whileTap={{ scale: 0.97 }}
+                        className={`
+                            w-full py-3 px-4
+                            text-sm font-medium
+                            rounded-xl
+                            transition-all duration-200 ease
+                            focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white
+                            flex items-center justify-center gap-2
+                            ${isDownloading
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-zinc-800 dark:text-gray-600'
+                                : (showConsentPrompt && !consentChecked)
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-zinc-800 dark:text-gray-600 opacity-50'
+                                    : 'bg-gray-900 text-white hover:bg-black active:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 shadow-sm hover:shadow-md'
+                            }
+                        `}
+                    >
+                        {isDownloading ? (
+                            <>
+                                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" />
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                </svg>
+                                Downloading...
+                            </>
+                        ) : (
+                            <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                {showConsentPrompt && !consentChecked ? 'Confirm & Download' : 'Download Font'}
+                            </>
+                        )}
+                    </motion.button>
+                </div>
 
                 {/* Find Alternatives Button */}
                 <motion.button
