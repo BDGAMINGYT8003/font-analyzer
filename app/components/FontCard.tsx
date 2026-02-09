@@ -21,6 +21,10 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
     const [consentChecked, setConsentChecked] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
 
+    // CSS Code state
+    const [showCss, setShowCss] = useState(false);
+    const [copied, setCopied] = useState(false);
+
     // Only proxy external URLs, keep data URLs as is
     const isDataUrl = font.url.startsWith('data:');
     const displayUrl = isDataUrl
@@ -117,7 +121,6 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
     };
 
     const handleDownload = () => {
-        // Check global consent
         const hasConsented = typeof window !== 'undefined' && localStorage.getItem('font-download-consent') === 'true';
 
         if (hasConsented) {
@@ -125,18 +128,40 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
             return;
         }
 
-        // If not consented, show prompt
         if (!showConsentPrompt) {
             setShowConsentPrompt(true);
             return;
         }
 
-        // If prompt shown, require check
         if (consentChecked) {
             localStorage.setItem('font-download-consent', 'true');
-            setShowConsentPrompt(false); // Hide prompt after consent
+            setShowConsentPrompt(false);
             performDownload();
         }
+    };
+
+    const generateCssCode = () => {
+        const slug = font.family.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const weight = font.weight || 'normal';
+        const style = font.style || 'normal';
+
+        return `@font-face {
+  font-family: '${font.family}';
+  src: url('${font.url}') format('${font.format?.toLowerCase() || 'woff2'}');
+  font-weight: ${weight};
+  font-style: ${style};
+  font-display: swap;
+}
+
+.${slug} {
+  font-family: '${font.family}', sans-serif;
+}`;
+    };
+
+    const handleCopyCss = () => {
+        navigator.clipboard.writeText(generateCssCode());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3500);
     };
 
     const formatBadgeStyle = (format: string): string => {
@@ -283,6 +308,53 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                         )}
                     </motion.button>
                 </div>
+
+                {/* Show CSS Code Button */}
+                <motion.button
+                    onClick={() => setShowCss(!showCss)}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full py-3 px-4 mt-2 text-sm font-medium rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-zinc-700 transition-all duration-150 ease flex items-center justify-center gap-2"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    {showCss ? 'Hide CSS Code' : 'Show CSS Code'}
+                </motion.button>
+
+                {/* CSS Code Drawer */}
+                <AnimatePresence>
+                    {showCss && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="mt-4 relative group/code">
+                                <pre className="p-4 bg-zinc-900 rounded-xl overflow-x-auto text-xs font-mono text-zinc-300 leading-relaxed border border-zinc-800 custom-scrollbar">
+                                    <code>{generateCssCode()}</code>
+                                </pre>
+                                <button
+                                    onClick={handleCopyCss}
+                                    className="absolute top-2 right-2 p-1.5 rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white transition-all duration-200 opacity-0 group-hover/code:opacity-100 focus:opacity-100 sm:opacity-0 sm:group-hover/code:opacity-100"
+                                    aria-label="Copy CSS"
+                                    title="Copy to clipboard"
+                                >
+                                    {copied ? (
+                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Find Alternatives Button */}
                 <motion.button
