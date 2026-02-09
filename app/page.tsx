@@ -198,7 +198,17 @@ export default function Home() {
         {/* Footer */}
         <footer className="py-10 md:py-16 border-t border-gray-200 mt-10 md:mt-20">
           <div className="max-w-5xl mx-auto px-4 md:px-6 text-center">
-            <p className="text-base font-medium text-gray-400 uppercase tracking-wider mb-6 text-center">Supports WOFF, WOFF2, TTF, and OTF formats</p>
+            {/* Supported Formats */}
+            <div className="mb-12 text-center">
+              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-6">Supported Formats</h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {['WOFF', 'WOFF2', 'TTF', 'OTF'].map((format) => (
+                  <span key={format} className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 text-xs font-semibold text-gray-600 dark:text-gray-300 tracking-wide">
+                    {format}
+                  </span>
+                ))}
+              </div>
+            </div>
             
             <div className="space-y-5 text-lg text-gray-500 leading-relaxed max-w-4xl mx-auto">
               <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Disclaimer</h3>

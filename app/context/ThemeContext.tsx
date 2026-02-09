@@ -12,22 +12,46 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  // Initialize with 'dark' to match the server-side default and script
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
+    // On mount, sync with actual classList or localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
+
+    // If we have a stored theme, update state
     if (storedTheme) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(storedTheme);
-      if (storedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    } else {
+      // If no stored theme, we assume 'dark' (as per script default)
+      // but double check if user explicitly prefers light?
+      // The request says "Set the website to default to Dark Mode immediately."
+      // The script defaults to dark if no storage. So state should be 'dark'.
+      // If user manually switched OS to light but hasn't visited site, script respects `prefers-color-scheme`?
+      // No, my script ignores `prefers-color-scheme` variable and just checks storage.
+      // Wait, let's look at the script logic I wrote:
+      /*
+        if (!localTheme || localTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      */
+      // It forces dark unless 'light' is explicitly stored.
+      // So here, if no storedTheme, theme is 'dark'.
       setTheme('dark');
-      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark'); // Persist the default choice? Or leave empty?
+      // Better to leave empty until toggle, but consistency is key.
+      // If I don't set it, reloading will re-run script which defaults to dark. Correct.
     }
+
+    // Ensure classList matches state (safety check)
+    if (storedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+    } else {
+        document.documentElement.classList.add('dark');
+    }
+
   }, []);
 
   const toggleTheme = () => {
@@ -40,11 +64,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.remove('dark');
     }
   };
-
-  // Prevent hydration mismatch by rendering children only after mount if needed,
-  // but to support SSR context access, we render Provider.
-  // Ideally, we accept that initial render is 'light' (or whatever default)
-  // and it updates after mount.
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

@@ -53,8 +53,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Script to force dark mode by default if no preference is set, or if 'dark' is set.
+  // We check localStorage. If it's missing, we default to 'dark'.
+  // If it's 'light', we remove 'dark' class.
+  const themeScript = `
+    (function() {
+      try {
+        var localTheme = localStorage.getItem('theme');
+        var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // Default to dark mode if no local theme is set
+        if (!localTheme || localTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  `;
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${manrope.variable} ${geist.variable} font-sans antialiased`}>
         <ThemeProvider>
           {children}
