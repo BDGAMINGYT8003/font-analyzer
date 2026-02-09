@@ -163,14 +163,17 @@ export default function Home() {
                 initial={{ opacity: 0, height: 0, marginBottom: 0 }}
                 animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
                 exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                className="md:hidden flex justify-end overflow-hidden"
+                className="md:hidden overflow-hidden"
               >
-                <div className="py-1">
-                  <ToggleSwitch
-                    label="Remove Duplicates (Beta)"
-                    checked={removeDuplicates}
-                    onChange={setRemoveDuplicates}
-                  />
+                <div className="py-2 flex justify-center">
+                  <div className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 inline-flex items-center mx-auto">
+                    <ToggleSwitch
+                      label="Remove Duplicates (Beta)"
+                      checked={removeDuplicates}
+                      onChange={setRemoveDuplicates}
+                      reverseOrder={true}
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}

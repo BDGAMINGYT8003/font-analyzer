@@ -7,11 +7,12 @@ interface ToggleSwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
     label: string;
+    reverseOrder?: boolean;
 }
 
-export default function ToggleSwitch({ checked, onChange, label }: ToggleSwitchProps) {
+export default function ToggleSwitch({ checked, onChange, label, reverseOrder = false }: ToggleSwitchProps) {
     return (
-        <div className="flex items-center gap-3">
+        <div className={`flex items-center gap-3 ${reverseOrder ? 'flex-row-reverse' : 'flex-row'}`}>
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400 select-none">
                 {label}
             </span>
