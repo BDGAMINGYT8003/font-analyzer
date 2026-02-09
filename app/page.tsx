@@ -6,7 +6,6 @@ import ThemeToggle from './components/ThemeToggle';
 import HeroSection from './components/HeroSection';
 import SearchInput from './components/SearchInput';
 import FontGrid from './components/FontGrid';
-import ToggleSwitch from './components/ToggleSwitch';
 import { FontInfo } from './types';
 
 export default function Home() {
@@ -240,7 +239,7 @@ export default function Home() {
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700 dark:text-gray-300">Download Responsibility:</span> While this tool allows you to download font files directly, you do so at your own risk. These files are provided "as-is" without warranty. Downloading a file does not transfer copyright or ownership. You are solely responsible for any legal consequences or copyright infringements that may arise from possessing or using proprietary or unlicensed fonts.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Download Responsibility:</span> While this tool allows you to download font files directly, you do so at your own risk. These files are provided &quot;as-is&quot; without warranty. Downloading a file does not transfer copyright or ownership. You are solely responsible for any legal consequences or copyright infringements that may arise from possessing or using proprietary or unlicensed fonts.
               </p>
 
               <p className="text-lg">

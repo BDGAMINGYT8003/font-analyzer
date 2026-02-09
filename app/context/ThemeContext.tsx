@@ -19,39 +19,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // On mount, sync with actual classList or localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
 
-    // If we have a stored theme, update state
-    if (storedTheme) {
-      setTheme(storedTheme);
-    } else {
+    // If we have a stored theme, update state only if different from default ('dark')
+    if (storedTheme === 'light') {
+      setTheme('light');
+    } else if (!storedTheme) {
       // If no stored theme, we assume 'dark' (as per script default)
-      // but double check if user explicitly prefers light?
-      // The request says "Set the website to default to Dark Mode immediately."
-      // The script defaults to dark if no storage. So state should be 'dark'.
-      // If user manually switched OS to light but hasn't visited site, script respects `prefers-color-scheme`?
-      // No, my script ignores `prefers-color-scheme` variable and just checks storage.
-      // Wait, let's look at the script logic I wrote:
-      /*
-        if (!localTheme || localTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      */
-      // It forces dark unless 'light' is explicitly stored.
-      // So here, if no storedTheme, theme is 'dark'.
-      setTheme('dark');
-      localStorage.setItem('theme', 'dark'); // Persist the default choice? Or leave empty?
-      // Better to leave empty until toggle, but consistency is key.
-      // If I don't set it, reloading will re-run script which defaults to dark. Correct.
+      localStorage.setItem('theme', 'dark');
     }
 
-    // Ensure classList matches state (safety check)
+    // Ensure classList matches logical state (safety check)
+    // Default is dark unless explicitly 'light'
     if (storedTheme === 'light') {
         document.documentElement.classList.remove('dark');
     } else {
         document.documentElement.classList.add('dark');
     }
-
   }, []);
 
   const toggleTheme = () => {

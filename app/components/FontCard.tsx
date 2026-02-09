@@ -179,6 +179,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
 
     return (
         <motion.div
+            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -208,7 +209,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                 <div className="mb-5 p-5 bg-gray-50 dark:bg-black rounded-xl min-h-[100px] flex items-center justify-center border border-transparent dark:border-zinc-800">
                     {fontLoaded ? (
                         <p
-                            className="text-2xl text-gray-900 dark:text-gray-100 text-center leading-relaxed"
+                            className="text-xl sm:text-2xl text-gray-900 dark:text-gray-100 text-center leading-relaxed"
                             style={{
                                 fontFamily: `'PreviewFont${index}', sans-serif`,
                                 fontStyle: font.style || 'normal',
@@ -276,7 +277,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                         disabled={isDownloading || (showConsentPrompt && !consentChecked)}
                         whileTap={{ scale: 0.97 }}
                         className={`
-                            w-full py-3 px-4
+                            w-full py-3 px-4 min-h-[44px]
                             text-sm font-medium
                             rounded-xl
                             transition-all duration-200 ease
@@ -313,7 +314,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                 <motion.button
                     onClick={() => setShowCss(!showCss)}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full py-3 px-4 mt-2 text-sm font-medium rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-zinc-700 transition-all duration-150 ease flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 min-h-[44px] mt-2 text-sm font-medium rounded-xl bg-gray-50 text-gray-600 hover:bg-gray-100 dark:bg-zinc-800 dark:text-gray-400 dark:hover:bg-zinc-700 transition-all duration-150 ease flex items-center justify-center gap-2"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -362,7 +363,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                     disabled={loadingAlternatives}
                     whileTap={{ scale: 0.97 }}
                     className={`
-            w-full py-3 px-4 mt-2
+            w-full py-3 px-4 min-h-[44px] mt-2
             text-sm font-medium
             rounded-xl
             transition-all duration-150 ease

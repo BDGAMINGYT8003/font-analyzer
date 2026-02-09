@@ -137,7 +137,7 @@ export default function SearchInput({
                 </div>
 
                 {/* Helper text area - Swaps with Toggle */}
-                <div className="relative mt-3 h-8">
+                <div className="relative mt-3 min-h-[2rem] flex flex-col items-center justify-center">
                     <AnimatePresence mode="wait">
                         {!hasResults ? (
                             <motion.p
@@ -146,7 +146,7 @@ export default function SearchInput({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.2 }}
-                                className="absolute inset-0 flex items-center justify-center text-sm text-gray-400"
+                                className="text-center text-sm text-gray-400 leading-relaxed px-4"
                             >
                                 <span>
                                     Try <button
@@ -171,9 +171,9 @@ export default function SearchInput({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.2 }}
-                                className="absolute inset-0 flex items-center justify-center pointer-events-auto"
+                                className="flex items-center justify-center pointer-events-auto w-full"
                             >
-                                <div className="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 flex items-center gap-3 shadow-sm">
+                                <div className="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 flex flex-wrap items-center justify-center gap-3 shadow-sm mx-auto max-w-full">
                                     <ToggleSwitch
                                         label="Remove Duplicates (Beta)"
                                         checked={removeDuplicates}

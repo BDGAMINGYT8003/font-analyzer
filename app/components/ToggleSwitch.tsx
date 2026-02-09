@@ -1,8 +1,6 @@
 
 'use client';
 
-import { motion } from 'motion/react';
-
 interface ToggleSwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;

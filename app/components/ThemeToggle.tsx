@@ -12,7 +12,7 @@ export default function ThemeToggle() {
       whileTap={{ scale: 0.95 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed top-6 right-6 z-50 p-3 bg-background/80 backdrop-blur-md border border-gray-200 rounded-full shadow-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+      className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 p-3 bg-background/80 backdrop-blur-md border border-gray-200 rounded-full shadow-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
       aria-label="Toggle theme"
     >
       {theme === 'light' ? (
