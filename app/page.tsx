@@ -6,6 +6,7 @@ import ThemeToggle from './components/ThemeToggle';
 import HeroSection from './components/HeroSection';
 import SearchInput from './components/SearchInput';
 import FontGrid from './components/FontGrid';
+import ToggleSwitch from './components/ToggleSwitch';
 import { FontInfo } from './types';
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const [searched, setSearched] = useState(false);
   const [previewText, setPreviewText] = useState('');
   const [resetKey, setResetKey] = useState(0);
+  const [removeDuplicates, setRemoveDuplicates] = useState(false);
 
   const handleSearch = async (targetUrl: string) => {
     setLoading(true);
@@ -68,7 +70,16 @@ export default function Home() {
     setLoading(false);
     setPreviewText('');
     setResetKey(prev => prev + 1);
+    setRemoveDuplicates(false);
   };
+
+  const uniqueFonts = fonts.filter((font, index, self) =>
+    index === self.findIndex((t) => (
+      t.family === font.family
+    ))
+  );
+
+  const displayedFonts = removeDuplicates ? uniqueFonts : fonts;
 
   return (
     <main className="min-h-screen bg-background relative transition-colors duration-300">
@@ -119,18 +130,48 @@ export default function Home() {
                   Found {fonts.length} {fonts.length === 1 ? 'font' : 'fonts'}
                 </h2>
 
-                <button
-                  onClick={handleClear}
-                  className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
-                  aria-label="Clear all results"
-                >
-                    <span className="p-1 rounded-md bg-gray-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-900/30 transition-colors duration-200">
-                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </span>
-                    Clear
-                </button>
+                <div className="flex items-center gap-6">
+                  <div className="hidden md:block">
+                    <ToggleSwitch
+                      label="Remove Duplicates (Beta)"
+                      checked={removeDuplicates}
+                      onChange={setRemoveDuplicates}
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleClear}
+                    className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
+                    aria-label="Clear all results"
+                  >
+                      <span className="p-1 rounded-md bg-gray-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-900/30 transition-colors duration-200">
+                          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                      </span>
+                      Clear
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Mobile Toggle Row */}
+          <AnimatePresence mode="wait">
+            {fonts.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                className="md:hidden flex justify-end overflow-hidden"
+              >
+                <div className="py-1">
+                  <ToggleSwitch
+                    label="Remove Duplicates (Beta)"
+                    checked={removeDuplicates}
+                    onChange={setRemoveDuplicates}
+                  />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -162,14 +203,14 @@ export default function Home() {
 
           {/* Font Grid */}
           <AnimatePresence mode="wait">
-            {fonts.length > 0 && (
+            {displayedFonts.length > 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <FontGrid fonts={fonts} previewText={previewText} />
+                <FontGrid fonts={displayedFonts} previewText={previewText} />
               </motion.div>
             )}
           </AnimatePresence>
