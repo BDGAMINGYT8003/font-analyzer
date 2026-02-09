@@ -185,7 +185,11 @@ export default function Home() {
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700 dark:text-gray-300">Respect Licenses:</span> Many web fonts are licensed software. Identifying a font does not grant you a license to use it. You are responsible for ensuring you have the appropriate rights or licenses for any font you reuse.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Respect Licenses:</span> Many web fonts are licensed software. Identifying or downloading a font does not grant you a license to use it. You are responsible for ensuring you have the appropriate rights or licenses for any font you reuse.
+              </p>
+
+              <p className="text-lg">
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Download Responsibility:</span> While this tool allows you to download font files directly, you do so at your own risk. These files are provided "as-is" without warranty. Downloading a file does not transfer copyright or ownership. You are solely responsible for any legal consequences or copyright infringements that may arise from possessing or using proprietary or unlicensed fonts.
               </p>
 
               <p className="text-lg">
@@ -193,7 +197,7 @@ export default function Home() {
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700 dark:text-gray-300">User Responsibility:</span> The author of this tool assumes no liability for the misuse of information provided. Please support type foundries by purchasing proper licenses for your projects.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">User Responsibility:</span> The author of this tool assumes no liability for the misuse of information or files provided. Please support type foundries by purchasing proper licenses for your projects.
               </p>
             </div>
 
