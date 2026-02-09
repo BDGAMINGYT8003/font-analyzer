@@ -14,6 +14,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [searched, setSearched] = useState(false);
   const [previewText, setPreviewText] = useState('');
+  const [resetKey, setResetKey] = useState(0);
 
   const handleSearch = async (targetUrl: string) => {
     setLoading(true);
@@ -60,6 +61,15 @@ export default function Home() {
     }
   };
 
+  const handleClear = () => {
+    setFonts([]);
+    setSearched(false);
+    setError('');
+    setLoading(false);
+    setPreviewText('');
+    setResetKey(prev => prev + 1);
+  };
+
   return (
     <main className="min-h-screen bg-background relative transition-colors duration-300">
       <ThemeToggle />
@@ -75,7 +85,7 @@ export default function Home() {
 
         {/* Search Input */}
         <div className="mt-10">
-          <SearchInput onSearch={handleSearch} loading={loading} />
+          <SearchInput key={resetKey} onSearch={handleSearch} loading={loading} />
         </div>
 
         {/* Results Section */}
@@ -103,11 +113,24 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                className="mb-8"
+                className="mb-8 flex justify-between items-center"
               >
                 <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
                   Found {fonts.length} {fonts.length === 1 ? 'font' : 'fonts'}
                 </h2>
+
+                <button
+                  onClick={handleClear}
+                  className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
+                  aria-label="Clear all results"
+                >
+                    <span className="p-1 rounded-md bg-gray-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-900/30 transition-colors duration-200">
+                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                    Clear
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -174,10 +197,10 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="py-10 md:py-16 border-t border-gray-200 mt-10 md:mt-20">
-          <div className="max-w-5xl mx-auto px-4 md:px-6">
-            <p className="text-base font-medium text-gray-400 uppercase tracking-wider mb-6">Supports WOFF, WOFF2, TTF, and OTF formats</p>
+          <div className="max-w-5xl mx-auto px-4 md:px-6 text-center">
+            <p className="text-base font-medium text-gray-400 uppercase tracking-wider mb-6 text-center">Supports WOFF, WOFF2, TTF, and OTF formats</p>
             
-            <div className="space-y-5 text-lg text-gray-500 leading-relaxed">
+            <div className="space-y-5 text-lg text-gray-500 leading-relaxed max-w-4xl mx-auto">
               <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Disclaimer</h3>
               
               <p className="text-lg">
@@ -201,7 +224,10 @@ export default function Home() {
               </p>
             </div>
 
-            <p className="mt-10 text-base text-gray-400">&copy; {new Date().getFullYear()} Analyze Any Font. Built for the design community.</p>
+            <div className="mt-16 flex flex-col items-center justify-center gap-1.5 opacity-80">
+                <p className="text-sm text-gray-400">&copy; 2026 Analyze Any Font.</p>
+                <p className="text-sm text-gray-400">Built for the design community</p>
+            </div>
           </div>
         </footer>
       </div>
