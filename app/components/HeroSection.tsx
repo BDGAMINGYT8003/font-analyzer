@@ -29,7 +29,7 @@ export default function HeroSection() {
     const currentFont = fonts[currentFontIndex];
 
     return (
-        <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 px-6">
+        <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 px-4 sm:px-6">
             <div className="relative max-w-4xl mx-auto text-center">
                 {/* Eyebrow */}
                 <motion.p
@@ -60,7 +60,7 @@ export default function HeroSection() {
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                 exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
                                 transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                                className="block text-4xl sm:text-5xl md:text-8xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight leading-none"
+                                className="block text-4xl sm:text-5xl md:text-8xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight leading-none whitespace-nowrap"
                                 style={{ fontFamily: currentFont.family }}
                             >
                                 Analyze Any Font
@@ -72,7 +72,7 @@ export default function HeroSection() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="absolute -bottom-8 left-1/2 -translate-x-1/2 inline-flex items-center gap-2 text-xs font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-150"
+                            className="absolute -bottom-12 sm:-bottom-8 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 sm:gap-2 text-xs font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-150 whitespace-nowrap"
                         >
                             <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-gray-400 dark:group-hover:bg-gray-500 transition-colors duration-150" />
                             {currentFont.name}
@@ -87,7 +87,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1], delay: 0.2 }}
-                    className="mt-10 md:mt-16 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
+                    className="mt-14 md:mt-16 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed"
                 >
                     Enter any website URL to instantly discover every font it uses.
                     Preview them live and find free alternatives.
