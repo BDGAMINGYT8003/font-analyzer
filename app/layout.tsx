@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope, Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -55,8 +56,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${manrope.variable} ${geist.variable} font-sans antialiased`}>
-        {children}
-        <Analytics />
+        <ThemeProvider>
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

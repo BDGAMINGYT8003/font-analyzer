@@ -82,15 +82,15 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
 
     const formatBadgeStyle = (format: string): string => {
         const styles: Record<string, string> = {
-            'WOFF2': 'bg-emerald-50 text-emerald-600',
-            'WOFF': 'bg-blue-50 text-blue-600',
-            'TRUETYPE': 'bg-violet-50 text-violet-600',
-            'TTF': 'bg-violet-50 text-violet-600',
-            'OPENTYPE': 'bg-amber-50 text-amber-600',
-            'OTF': 'bg-amber-50 text-amber-600',
-            'EOT': 'bg-red-50 text-red-600',
+            'WOFF2': 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400',
+            'WOFF': 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+            'TRUETYPE': 'bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400',
+            'TTF': 'bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400',
+            'OPENTYPE': 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400',
+            'OTF': 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400',
+            'EOT': 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400',
         };
-        return styles[format.toUpperCase()] || 'bg-gray-100 text-gray-600';
+        return styles[format.toUpperCase()] || 'bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-gray-400';
     };
 
 
@@ -104,16 +104,16 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                 ease: [0.23, 1, 0.32, 1],
                 delay: index * 0.05
             }}
-            className="group relative bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] transition-all duration-200 ease"
+            className="group relative bg-white dark:bg-zinc-900 rounded-2xl border border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)] transition-all duration-200 ease"
         >
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-5">
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate" title={font.family}>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate" title={font.family}>
                             {font.family}
                         </h3>
-                        <p className="text-sm text-gray-400 truncate mt-0.5" title={font.name}>
+                        <p className="text-sm text-gray-400 dark:text-gray-500 truncate mt-0.5" title={font.name}>
                             {font.name}
                         </p>
                     </div>
@@ -123,10 +123,10 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                 </div>
 
                 {/* Font Preview */}
-                <div className="mb-5 p-5 bg-gray-50 rounded-xl min-h-[100px] flex items-center justify-center">
+                <div className="mb-5 p-5 bg-gray-50 dark:bg-black rounded-xl min-h-[100px] flex items-center justify-center border border-transparent dark:border-zinc-800">
                     {fontLoaded ? (
                         <p
-                            className="text-2xl text-gray-900 text-center leading-relaxed"
+                            className="text-2xl text-gray-900 dark:text-gray-100 text-center leading-relaxed"
                             style={{
                                 fontFamily: `'PreviewFont${index}', sans-serif`,
                                 fontStyle: font.style || 'normal',
@@ -136,7 +136,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                             {previewText || 'The quick brown fox jumps over the lazy dog'}
                         </p>
                     ) : (
-                        <div className="flex items-center gap-2 text-gray-400">
+                        <div className="flex items-center gap-2 text-gray-400 dark:text-gray-600">
                             <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -147,7 +147,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                 </div>
 
                 {/* Meta Info */}
-                <div className="flex items-center gap-4 mb-5 text-sm text-gray-400">
+                <div className="flex flex-wrap items-center gap-4 mb-5 text-sm text-gray-400 dark:text-gray-500">
                     <span className="flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
@@ -175,8 +175,8 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
             transition-all duration-150 ease
             focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
             ${loadingAlternatives
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-blue-50 text-blue-600 hover:bg-blue-100 active:bg-blue-200'
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-zinc-800 dark:text-gray-600'
+                            : 'bg-blue-50 text-blue-600 hover:bg-blue-100 active:bg-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30'
                         }
           `}
                 >
@@ -206,7 +206,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="mt-4 pt-4 border-t border-gray-100"
+                            className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800"
                         >
                             <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
                                 <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,36 +224,36 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: i * 0.05 }}
-                                        className="block p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors duration-150 group"
+                                        className="block p-3 bg-gray-50 hover:bg-gray-100 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg transition-colors duration-150 group"
                                     >
                                         <div className="flex items-center justify-between">
                                             <div className="flex-1 min-w-0 mr-3">
                                                 <div className="flex items-center gap-2">
-                                                    <p className="font-medium text-gray-900 text-sm group-hover:text-blue-600 transition-colors">
+                                                    <p className="font-medium text-gray-900 dark:text-gray-200 text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                                         {alt.family}
                                                     </p>
                                                     {alt.similarity != null && alt.similarity > 0 && (
                                                         <span className={`text-xs font-medium px-1.5 py-0.5 rounded-md ${
-                                                            alt.similarity >= 80 ? 'bg-green-50 text-green-600' :
-                                                            alt.similarity >= 60 ? 'bg-yellow-50 text-yellow-600' :
-                                                            'bg-gray-100 text-gray-500'
+                                                            alt.similarity >= 80 ? 'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
+                                                            alt.similarity >= 60 ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                                            'bg-gray-100 text-gray-500 dark:bg-zinc-700 dark:text-gray-400'
                                                         }`}>
                                                             {alt.similarity}%
                                                         </span>
                                                     )}
                                                 </div>
-                                                <p className="text-xs text-gray-400 mt-0.5">
+                                                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                                                     {alt.reason || alt.category}
                                                 </p>
                                             </div>
-                                            <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:text-gray-500 dark:group-hover:text-blue-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                             </svg>
                                         </div>
                                     </motion.a>
                                 ))}
                             </div>
-                            <p className="text-xs text-gray-400 mt-3 italic">
+                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 italic">
                                 These Google Fonts are free to use commercially and personally
                             </p>
                         </motion.div>

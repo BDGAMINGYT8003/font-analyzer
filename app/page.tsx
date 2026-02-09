@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import ThemeToggle from './components/ThemeToggle';
 import HeroSection from './components/HeroSection';
 import SearchInput from './components/SearchInput';
 import FontGrid from './components/FontGrid';
@@ -60,10 +61,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white relative">
+    <main className="min-h-screen bg-background relative transition-colors duration-300">
+      <ThemeToggle />
       {/* Background Pattern */}
-      <div className="fixed inset-0 h-full w-full bg-white pointer-events-none">
-        <div className="absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <div className="fixed inset-0 h-full w-full bg-background pointer-events-none transition-colors duration-300">
+        <div className="absolute h-full w-full bg-[radial-gradient(var(--gray-200)_1px,transparent_1px)] [background-size:16px_16px]"></div>
       </div>
 
       {/* Content */}
@@ -77,7 +79,7 @@ export default function Home() {
         </div>
 
         {/* Results Section */}
-        <section className="max-w-6xl mx-auto px-6 py-16">
+        <section className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-16">
           {/* Error Message */}
           <AnimatePresence mode="wait">
             {error && (
@@ -86,7 +88,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                className="mb-8 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-center text-sm"
+                className="mb-8 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 rounded-xl text-red-600 dark:text-red-400 text-center text-sm"
               >
                 {error}
               </motion.div>
@@ -119,12 +121,12 @@ export default function Home() {
                   value={previewText}
                   onChange={(e) => setPreviewText(e.target.value)}
                   placeholder="Type custom preview text…"
-                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-150"
+                  className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 focus:border-transparent transition-all duration-150"
                 />
                 {previewText && (
                   <button
                     onClick={() => setPreviewText('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -171,27 +173,27 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="py-16 border-t border-gray-200 mt-20">
-          <div className="max-w-5xl mx-auto px-6">
+        <footer className="py-10 md:py-16 border-t border-gray-200 mt-10 md:mt-20">
+          <div className="max-w-5xl mx-auto px-4 md:px-6">
             <p className="text-base font-medium text-gray-400 uppercase tracking-wider mb-6">Supports WOFF, WOFF2, TTF, and OTF formats</p>
             
             <div className="space-y-5 text-lg text-gray-500 leading-relaxed">
-              <h3 className="text-xl font-bold text-gray-700 uppercase tracking-wide">Disclaimer</h3>
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Disclaimer</h3>
               
               <p className="text-lg">
                 Analyze Any Font is a developer utility designed to help designers and developers inspect and identify typography used on the web for testing and research purposes.
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700">Respect Licenses:</span> Many web fonts are licensed software. Identifying a font does not grant you a license to use it. You are responsible for ensuring you have the appropriate rights or licenses for any font you reuse.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">Respect Licenses:</span> Many web fonts are licensed software. Identifying a font does not grant you a license to use it. You are responsible for ensuring you have the appropriate rights or licenses for any font you reuse.
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700">No Circumvention:</span> This tool only detects styles that are already sent to your browser for rendering. It does not bypass DRM, decrypt secured files, or access private directories.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">No Circumvention:</span> This tool only detects styles that are already sent to your browser for rendering. It does not bypass DRM, decrypt secured files, or access private directories.
               </p>
 
               <p className="text-lg">
-                <span className="font-semibold text-gray-700">User Responsibility:</span> The author of this tool assumes no liability for the misuse of information provided. Please support type foundries by purchasing proper licenses for your projects.
+                <span className="font-semibold text-gray-700 dark:text-gray-300">User Responsibility:</span> The author of this tool assumes no liability for the misuse of information provided. Please support type foundries by purchasing proper licenses for your projects.
               </p>
             </div>
 

@@ -18,8 +18,6 @@ const importRegex = /@import\s+(?:url\(['"]?|['"])([^'")]+\.css[^'")]*)(?:['"]?\
 // Regex to extract properties from @font-face
 const fontFamilyRegex = /font-family\s*:\s*['"]?([^'";]+)['"]?/i;
 const srcRegex = /src\s*:\s*([^;]+)/i;
-const urlRegex = /url\s*\(\s*['"]?([^'")]+)['"]?\s*\)/gi;
-const formatRegex = /format\s*\(\s*['"]?([^'")]+)['"]?\s*\)/i;
 const weightRegex = /font-weight\s*:\s*([^;]+)/i;
 const styleRegex = /font-style\s*:\s*([^;]+)/i;
 
@@ -147,6 +145,7 @@ async function fetchAndParseCSS(url: string, depth: number = 0, fetchedUrls: Set
 }
 
 async function extractFontsWithPlaywright(targetUrl: string): Promise<FontInfo[]> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let browser: any;
   try {
     const { chromium } = await import('playwright');
@@ -219,7 +218,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
     }
 
-    let realFonts = await extractFontsWithPlaywright(targetUrl.href);
+    const realFonts = await extractFontsWithPlaywright(targetUrl.href);
 
     const response = await fetch(targetUrl.href, {
       headers: {
