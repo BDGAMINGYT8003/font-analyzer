@@ -21,6 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // If we have a stored theme, update state only if different from default ('dark')
     if (storedTheme === 'light') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme('light');
     } else if (!storedTheme) {
       // If no stored theme, we assume 'dark' (as per script default)
