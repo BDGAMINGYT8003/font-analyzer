@@ -1,14 +1,24 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import ToggleSwitch from './ToggleSwitch';
 
 interface SearchInputProps {
     onSearch: (url: string) => void;
     loading: boolean;
+    hasResults: boolean;
+    removeDuplicates: boolean;
+    onRemoveDuplicatesChange: (checked: boolean) => void;
 }
 
-export default function SearchInput({ onSearch, loading }: SearchInputProps) {
+export default function SearchInput({
+    onSearch,
+    loading,
+    hasResults,
+    removeDuplicates,
+    onRemoveDuplicatesChange
+}: SearchInputProps) {
     const [url, setUrl] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -126,22 +136,55 @@ export default function SearchInput({ onSearch, loading }: SearchInputProps) {
                     </div>
                 </div>
 
-                {/* Helper text */}
-                <p className="mt-3 text-center text-sm text-gray-400">
-                    Try <button
-                        type="button"
-                        onClick={() => { setUrl('stripe.com'); inputRef.current?.focus(); }}
-                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
-                    >stripe.com</button>, <button
-                        type="button"
-                        onClick={() => { setUrl('linear.app'); inputRef.current?.focus(); }}
-                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
-                    >linear.app</button>, or <button
-                        type="button"
-                        onClick={() => { setUrl('vercel.com'); inputRef.current?.focus(); }}
-                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
-                    >vercel.com</button>
-                </p>
+                {/* Helper text area - Swaps with Toggle */}
+                <div className="relative mt-3 h-8">
+                    <AnimatePresence mode="wait">
+                        {!hasResults ? (
+                            <motion.p
+                                key="helper-text"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="absolute inset-0 flex items-center justify-center text-sm text-gray-400"
+                            >
+                                <span>
+                                    Try <button
+                                        type="button"
+                                        onClick={() => { setUrl('stripe.com'); inputRef.current?.focus(); }}
+                                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
+                                    >stripe.com</button>, <button
+                                        type="button"
+                                        onClick={() => { setUrl('linear.app'); inputRef.current?.focus(); }}
+                                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
+                                    >linear.app</button>, or <button
+                                        type="button"
+                                        onClick={() => { setUrl('vercel.com'); inputRef.current?.focus(); }}
+                                        className="text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors duration-150"
+                                    >vercel.com</button>
+                                </span>
+                            </motion.p>
+                        ) : (
+                            <motion.div
+                                key="toggle-controls"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="absolute inset-0 flex items-center justify-center pointer-events-auto"
+                            >
+                                <div className="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 flex items-center gap-3 shadow-sm">
+                                    <ToggleSwitch
+                                        label="Remove Duplicates (Beta)"
+                                        checked={removeDuplicates}
+                                        onChange={onRemoveDuplicatesChange}
+                                        reverseOrder={true}
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </form>
         </motion.div>
     );

@@ -96,7 +96,14 @@ export default function Home() {
 
         {/* Search Input */}
         <div className="mt-10">
-          <SearchInput key={resetKey} onSearch={handleSearch} loading={loading} />
+          <SearchInput
+            key={resetKey}
+            onSearch={handleSearch}
+            loading={loading}
+            hasResults={fonts.length > 0}
+            removeDuplicates={removeDuplicates}
+            onRemoveDuplicatesChange={setRemoveDuplicates}
+          />
         </div>
 
         {/* Results Section */}
@@ -124,57 +131,24 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-                className="mb-8 flex justify-between items-center"
+                className="mb-4 flex justify-between items-center"
               >
                 <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
                   Found {fonts.length} {fonts.length === 1 ? 'font' : 'fonts'}
                 </h2>
 
-                <div className="flex items-center gap-6">
-                  <div className="hidden md:block">
-                    <ToggleSwitch
-                      label="Remove Duplicates (Beta)"
-                      checked={removeDuplicates}
-                      onChange={setRemoveDuplicates}
-                    />
-                  </div>
-
-                  <button
-                    onClick={handleClear}
-                    className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
-                    aria-label="Clear all results"
-                  >
-                      <span className="p-1 rounded-md bg-gray-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-900/30 transition-colors duration-200">
-                          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                      </span>
-                      Clear
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Mobile Toggle Row */}
-          <AnimatePresence mode="wait">
-            {fonts.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
-                animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
-                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                className="md:hidden overflow-hidden"
-              >
-                <div className="py-2 flex justify-center">
-                  <div className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700/50 inline-flex items-center mx-auto">
-                    <ToggleSwitch
-                      label="Remove Duplicates (Beta)"
-                      checked={removeDuplicates}
-                      onChange={setRemoveDuplicates}
-                      reverseOrder={true}
-                    />
-                  </div>
-                </div>
+                <button
+                  onClick={handleClear}
+                  className="group flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
+                  aria-label="Clear all results"
+                >
+                    <span className="p-1 rounded-md bg-gray-100 dark:bg-zinc-800 group-hover:bg-red-50 dark:group-hover:bg-red-900/30 transition-colors duration-200">
+                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                    Clear
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
