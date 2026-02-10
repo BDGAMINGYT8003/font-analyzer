@@ -60,7 +60,6 @@ export default function RootLayout({
     (function() {
       try {
         var localTheme = localStorage.getItem('theme');
-        var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         // Default to dark mode if no local theme is set
         if (!localTheme || localTheme === 'dark') {
