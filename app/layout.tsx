@@ -54,15 +54,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Script to force dark mode by default if no preference is set, or if 'dark' is set.
-  // We check localStorage. If it's missing, we default to 'dark'.
-  // If it's 'light', we remove 'dark' class.
+  // We check localStorage. If it's missing, we default to 'system' preference.
   const themeScript = `
     (function() {
       try {
         var localTheme = localStorage.getItem('theme');
+        var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
 
-        // Default to dark mode if no local theme is set
-        if (!localTheme || localTheme === 'dark') {
+        if (localTheme === 'dark' || ((!localTheme || localTheme === 'system') && supportDarkMode)) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');

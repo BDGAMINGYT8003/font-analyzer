@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import ThemeToggle from './components/ThemeToggle';
+import FooterThemeToggle from './components/FooterThemeToggle';
 import HeroSection from './components/HeroSection';
 import SearchInput from './components/SearchInput';
 import FontGrid from './components/FontGrid';
@@ -82,7 +82,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background relative transition-colors duration-300">
-      <ThemeToggle />
       {/* Background Pattern */}
       <div className="fixed inset-0 h-full w-full bg-background pointer-events-none transition-colors duration-300">
         <div className="absolute h-full w-full bg-[radial-gradient(var(--gray-200)_1px,transparent_1px)] [background-size:16px_16px]"></div>
@@ -251,9 +250,12 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-16 flex flex-col items-center justify-center gap-1.5 opacity-80">
-                <p className="text-sm text-gray-400">&copy; 2026 Analyze Any Font.</p>
-                <p className="text-sm text-gray-400">Built for the design community</p>
+            <div className="mt-16 flex flex-col items-center justify-center">
+                <FooterThemeToggle />
+                <div className="flex flex-col items-center justify-center gap-1.5 opacity-80">
+                    <p className="text-sm text-gray-400">&copy; 2026 Analyze Any Font.</p>
+                    <p className="text-sm text-gray-400">Built for the design community</p>
+                </div>
             </div>
           </div>
         </footer>

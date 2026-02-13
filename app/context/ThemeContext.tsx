@@ -2,54 +2,81 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | 'system';
 
 interface ThemeContextType {
   theme: Theme;
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Initialize with 'dark' to match the server-side default and script
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setThemeState] = useState<Theme>('system');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // On mount, sync with actual classList or localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
-
-    // If we have a stored theme, update state only if different from default ('dark')
-    if (storedTheme === 'light') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTheme('light');
-    } else if (!storedTheme) {
-      // If no stored theme, we assume 'dark' (as per script default)
-      localStorage.setItem('theme', 'dark');
+    if (storedTheme) {
+      // eslint-disable-next-line
+      setThemeState(storedTheme);
     }
-
-    // Ensure classList matches logical state (safety check)
-    // Default is dark unless explicitly 'light'
-    if (storedTheme === 'light') {
-        document.documentElement.classList.remove('dark');
-    } else {
-        document.documentElement.classList.add('dark');
-    }
+    setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!mounted) return;
+
+    const root = document.documentElement;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = () => {
+      if (theme === 'dark') {
+        root.classList.add('dark');
+      } else if (theme === 'light') {
+        root.classList.remove('dark');
+      } else if (theme === 'system') {
+        if (mediaQuery.matches) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+      }
+    };
+
+    applyTheme();
+
+    const handleSystemChange = () => {
+      if (theme === 'system') {
+        applyTheme();
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleSystemChange);
+    localStorage.setItem('theme', theme);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleSystemChange);
+    };
+  }, [theme, mounted]);
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+  };
+
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    setThemeState(prev => {
+      if (prev === 'light') return 'dark';
+      if (prev === 'dark') return 'light';
+      return 'light'; // default fallback for system -> light, or maybe should cycle?
+      // Since we are replacing the toggler with a segmented control, toggleTheme might not be used anymore,
+      // but keeping it for backward compatibility or simple toggling is fine.
+    });
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
