@@ -15,8 +15,8 @@ export default function ThemeSegmentedControl() {
   if (!mounted) {
     // Render a placeholder to avoid hydration mismatch, same structure but static
     return (
-        <div className="flex items-center justify-center p-1 bg-gray-100 dark:bg-zinc-800/50 rounded-full border border-gray-200 dark:border-zinc-700/50 opacity-0">
-             <div className="w-24 h-8"></div>
+        <div className="flex items-center justify-center p-0.5 md:p-1 bg-gray-100 dark:bg-zinc-800/50 rounded-full border border-gray-200 dark:border-zinc-700/50 opacity-0">
+             <div className="w-20 md:w-24 h-7 md:h-8"></div>
         </div>
     );
   }
@@ -28,14 +28,14 @@ export default function ThemeSegmentedControl() {
   ] as const;
 
   return (
-    <div className="inline-flex items-center justify-center p-1 bg-gray-100 dark:bg-zinc-800/80 rounded-full border border-gray-200 dark:border-zinc-700/50 shadow-sm relative">
+    <div className="inline-flex items-center justify-center p-0.5 md:p-1 bg-gray-100 dark:bg-zinc-800/80 rounded-full border border-gray-200 dark:border-zinc-700/50 shadow-sm relative">
       {options.map((option) => {
         const isActive = theme === option.id;
         return (
           <button
             key={option.id}
             onClick={() => setTheme(option.id)}
-            className={`relative z-10 w-10 h-8 flex items-center justify-center text-sm font-medium transition-colors duration-200 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 ${
+            className={`relative z-10 w-8 h-7 md:w-10 md:h-8 flex items-center justify-center text-sm font-medium transition-colors duration-200 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 ${
               isActive
                 ? 'text-gray-900 dark:text-gray-100'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -50,7 +50,7 @@ export default function ThemeSegmentedControl() {
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}
-            <span className="relative z-20 w-4 h-4">
+            <span className="relative z-20 w-3.5 h-3.5 md:w-4 md:h-4">
               {option.icon}
             </span>
           </button>

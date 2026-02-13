@@ -250,10 +250,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-16 flex flex-col items-center justify-center gap-6 opacity-80">
+            <div className="mt-16 flex flex-col items-center justify-center gap-1.5 opacity-80">
                 <ThemeSegmentedControl />
                 <div className="flex flex-col items-center justify-center gap-1.5">
-                    <p className="text-sm text-gray-400">&copy; 2026 Analyze Any Font.</p>
+                    <p className="text-sm text-gray-400">&copy; 2026 Analyze Any Font</p>
                     <p className="text-sm text-gray-400">Built for the design community</p>
                 </div>
             </div>
