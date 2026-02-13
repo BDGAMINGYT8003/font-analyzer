@@ -1,23 +1,31 @@
 # Font Downloader
 
-A web tool to discover and download fonts from any website. Simply enter a URL to extract all fonts used on the page, preview them live, and download with a single click.
+A powerful web tool to discover, inspect, and download fonts from any website. Simply enter a URL to extract all fonts used on the page, preview them live, view their CSS properties, and find legal alternatives.
 
 ## ⚠️ Important Legal Disclaimer
 
-**This tool does not grant licenses or permissions for font usage.**
+**This tool is a developer utility for inspection and research purposes.**
 
-Users are solely responsible for ensuring they have the legal right to download and use any font files accessed through this tool. The service is provided for inspection and development purposes only.
-
-Always verify that you have proper licensing before using downloaded fonts in your projects.
+Respect Licenses: Many web fonts are licensed software. Identifying or downloading a font does not grant you a license to use it. You are responsible for ensuring you have the appropriate rights or licenses for any font you reuse.
 
 ## Features
 
-- 🔍 Extract fonts from any website URL
-- 👀 Live preview of each font with customizable text
-- 📥 One-click download support for WOFF, WOFF2, TTF, and OTF formats
-- ✅ **Find legal alternatives** - Get free Google Fonts suggestions similar to extracted fonts
-- ⚡ Fast extraction with modern Next.js architecture
-- 🎨 Beautiful UI with smooth animations
+- 🔍 **Extract Fonts:** Analyze any website URL to discover all used fonts.
+- 📱 **Fully Responsive:** Optimized mobile experience and a robust Masonry grid layout for desktop.
+- 🌓 **Dark & Light Mode:** Seamless theme switching with system preference detection.
+- 👀 **Live Preview:** Type custom text to preview fonts instantly.
+- 💻 **CSS Inspector:** View and copy the `@font-face` CSS code for any font.
+- 🧹 **Smart Filtering:** Toggle "Remove Duplicates" to clean up the font list.
+- 📥 **Direct Download:** Download WOFF, WOFF2, TTF, and OTF files (with legal consent verification).
+- ✅ **Find Alternatives:** Get free Google Fonts suggestions similar to extracted fonts.
+
+## Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Animations:** Motion (formerly Framer Motion)
+- **Font Loading:** Next.js Font Optimization
 
 ## Getting Started
 
@@ -29,57 +37,40 @@ Always verify that you have proper licensing before using downloaded fonts in yo
 ### Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/shoryabansalgithub/font-stealer.git
-cd font-stealer
-```
+   ```bash
+   git clone https://github.com/shoryabansalgithub/font-stealer.git
+   cd font-stealer
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
 
 3. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## How It Works
-
-1. Enter any website URL in the search box
-2. The tool fetches and analyzes the page's CSS and font files
-3. All discovered fonts are displayed with their family names, weights, and styles
-4. Click on any font to preview it with custom text
-5. Download fonts individually with the download button
-6. **NEW:** Click "Find Legal Alternatives" to discover free Google Fonts with similar styling - perfect for avoiding licensing issues!
-
-## Tech Stack
-
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **Font Loading:** Next.js Font Optimization
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## API Routes
 
-- `/api/extract` - POST endpoint to extract fonts from a given URL
-- `/api/font` - GET endpoint to fetch and serve font files
-- `/api/match` - POST endpoint to find similar free/open-source font alternatives from Google Fonts
+- `/api/extract` - POST endpoint to extract fonts from a given URL.
+- `/api/font` - GET endpoint to fetch and serve font files securely.
+- `/api/match` - POST endpoint to find similar free/open-source font alternatives.
 
 ## Supported Font Formats
 
@@ -90,7 +81,7 @@ bun dev
 
 ## License
 
-MIT License - See LICENSE file for details
+MIT License - See LICENSE file for details.
 
 ## Contributing
 

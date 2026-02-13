@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope, Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -52,11 +53,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Script to initialize theme based on localStorage or system preference.
+  const themeScript = `
+    (function() {
+      try {
+        var localTheme = localStorage.getItem('theme');
+        var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (localTheme === 'dark' || ((!localTheme || localTheme === 'system') && supportDarkMode)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  `;
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${manrope.variable} ${geist.variable} font-sans antialiased`}>
-        {children}
-        <Analytics />
+        <ThemeProvider>
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
