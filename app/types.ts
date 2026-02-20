@@ -18,3 +18,8 @@ export interface FontAlternative {
     reason?: string;
     similarity?: number;
 }
+
+export interface SavedFont extends FontInfo {
+    notes?: string;
+    savedAt: number;
+}

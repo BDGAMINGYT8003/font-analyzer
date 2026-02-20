@@ -7,9 +7,10 @@ import { LayoutGroup } from 'motion/react';
 interface FontGridProps {
     fonts: FontInfo[];
     previewText?: string;
+    showNotes?: boolean;
 }
 
-export default function FontGrid({ fonts, previewText }: FontGridProps) {
+export default function FontGrid({ fonts, previewText, showNotes = false }: FontGridProps) {
     // Split fonts for desktop masonry layout (evens left, odds right)
     const leftColumnFonts = fonts.filter((_, i) => i % 2 === 0);
     const rightColumnFonts = fonts.filter((_, i) => i % 2 !== 0);
@@ -24,6 +25,7 @@ export default function FontGrid({ fonts, previewText }: FontGridProps) {
                         font={font}
                         index={index}
                         previewText={previewText}
+                        showNotes={showNotes}
                     />
                 ))}
             </div>
@@ -40,6 +42,7 @@ export default function FontGrid({ fonts, previewText }: FontGridProps) {
                                 font={font}
                                 index={originalIndex}
                                 previewText={previewText}
+                                showNotes={showNotes}
                             />
                         );
                     })}
@@ -54,6 +57,7 @@ export default function FontGrid({ fonts, previewText }: FontGridProps) {
                                 font={font}
                                 index={originalIndex}
                                 previewText={previewText}
+                                showNotes={showNotes}
                             />
                         );
                     })}

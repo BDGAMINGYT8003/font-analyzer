@@ -7,6 +7,7 @@ import HeroSection from './components/HeroSection';
 import SearchInput from './components/SearchInput';
 import FontGrid from './components/FontGrid';
 import { FontInfo } from './types';
+import Link from 'next/link';
 
 export default function Home() {
   const [fonts, setFonts] = useState<FontInfo[]>([]);
@@ -89,6 +90,19 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative z-10">
+        {/* Saved Library Link */}
+        <div className="absolute top-6 right-6 z-20">
+            <Link
+                href="/saved"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border border-gray-200 dark:border-zinc-700 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700/80 transition-all duration-200 shadow-sm"
+            >
+                <svg className="w-4 h-4 text-red-500 fill-current" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={0} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                Saved Library
+            </Link>
+        </div>
+
         {/* Hero Section */}
         <HeroSection />
 

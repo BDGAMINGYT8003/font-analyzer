@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Manrope, Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "./context/ThemeContext";
+import { SavedFontsProvider } from "./context/SavedFontsContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -76,8 +77,10 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${manrope.variable} ${geist.variable} font-sans antialiased`}>
         <ThemeProvider>
-          {children}
-          <Analytics />
+          <SavedFontsProvider>
+            {children}
+            <Analytics />
+          </SavedFontsProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FontInfo, FontAlternative } from '../types';
+import { useSavedFonts } from '../context/SavedFontsContext';
 
 interface FontCardProps {
     font: FontInfo;
     index: number;
     previewText?: string;
+    showNotes?: boolean;
 }
 
-export default function FontCard({ font, index, previewText }: FontCardProps) {
+export default function FontCard({ font, index, previewText, showNotes = false }: FontCardProps) {
+    const { saveFont, removeFont, isSaved, updateNotes, savedFonts } = useSavedFonts();
     const [fontLoaded, setFontLoaded] = useState(false);
     const [showAlternatives, setShowAlternatives] = useState(false);
     const [alternatives, setAlternatives] = useState<FontAlternative[]>([]);
@@ -24,6 +27,8 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
     // CSS Code state
     const [showCss, setShowCss] = useState(false);
     const [copied, setCopied] = useState(false);
+
+    const isSavedState = isSaved(font.url);
 
     // Only proxy external URLs, keep data URLs as is
     const isDataUrl = font.url.startsWith('data:');
@@ -56,6 +61,14 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
             if (el) el.remove();
         };
     }, [font, index, displayUrl, isDataUrl]);
+
+    const handleSaveToggle = () => {
+        if (isSavedState) {
+            removeFont(font.url);
+        } else {
+            saveFont(font);
+        }
+    };
 
     const findAlternatives = async () => {
         if (alternatives.length > 0) {
@@ -177,6 +190,11 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
         return styles[format.toUpperCase()] || 'bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-gray-400';
     };
 
+    // Determine the current notes value if showing notes
+    const currentNotes = showNotes
+        ? savedFonts.find(f => f.url === font.url)?.notes || ''
+        : '';
+
     return (
         <motion.div
             layout
@@ -192,7 +210,7 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
             <div className="p-4 sm:p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-5">
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 mr-3">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate" title={font.family}>
                             {font.family}
                         </h3>
@@ -200,9 +218,26 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                             {font.name}
                         </p>
                     </div>
-                    <span className={`ml-3 px-2.5 py-1 text-xs font-medium rounded-lg ${formatBadgeStyle(font.format)}`}>
-                        {font.format}
-                    </span>
+                    <div className="flex items-center gap-2">
+                         {/* Save Button */}
+                         <button
+                            onClick={handleSaveToggle}
+                            className={`p-2 rounded-lg transition-colors duration-200 ${
+                                isSavedState
+                                ? 'bg-red-50 text-red-500 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50'
+                                : 'bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:bg-zinc-800 dark:text-gray-500 dark:hover:bg-zinc-700 dark:hover:text-gray-300'
+                            }`}
+                            aria-label={isSavedState ? "Unsave font" : "Save font"}
+                            title={isSavedState ? "Remove from saved" : "Save to library"}
+                        >
+                            <svg className={`w-4 h-4 ${isSavedState ? 'fill-current' : 'fill-none'}`} stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isSavedState ? 0 : 2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                        <span className={`px-2.5 py-1 text-xs font-medium rounded-lg ${formatBadgeStyle(font.format)}`}>
+                            {font.format}
+                        </span>
+                    </div>
                 </div>
 
                 {/* Font Preview */}
@@ -228,6 +263,21 @@ export default function FontCard({ font, index, previewText }: FontCardProps) {
                         </div>
                     )}
                 </div>
+
+                {/* Notes Section (Only if enabled) */}
+                {showNotes && (
+                    <div className="mb-5">
+                         <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                            Personal Notes
+                        </label>
+                        <textarea
+                            value={currentNotes}
+                            onChange={(e) => updateNotes(font.url, e.target.value)}
+                            placeholder="Add notes about this font..."
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-y min-h-[80px]"
+                        />
+                    </div>
+                )}
 
                 {/* Meta Info */}
                 <div className="flex flex-wrap items-center gap-4 mb-5 text-sm text-gray-400 dark:text-gray-500">
